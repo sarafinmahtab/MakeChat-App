@@ -1,0 +1,31 @@
+
+#upload_hint {
+	-fx-text-fill:rgb(0,0,210);
+	-fx-font-family:cambria;
+	-fx-font-style:italic;
+	-fx-font-size: 14;
+}
+
+#userNameError {
+	-fx-text-fill:rgb(232,0,5);
+	-fx-font-family:cambria;
+	-fx-font-size: 14;
+}
+
+#emailError {
+	-fx-text-fill:rgb(232,0,5);
+	-fx-font-family:cambria;
+	-fx-font-size: 14;
+}
+
+#serverAddressError {
+	-fx-text-fill:rgb(232,0,5);
+	-fx-font-family:cambria;
+	-fx-font-size: 14;	
+}
+
+#connectStatusResult {
+	-fx-text-fill:rgb(232,0,5);
+	-fx-font-family:cambria;
+	-fx-font-size: 14;
+}
