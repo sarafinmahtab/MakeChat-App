@@ -10,11 +10,12 @@ import javafx.scene.layout.Pane;
 
 
 public class Main extends Application {
+	
 	@Override
 	public void start(Stage stage) {
 		try {
 			stage.setScene(createScene(loadMainPane()));
-			stage.setTitle("MakeChat Application - Chat with Others");
+			stage.setTitle("MakeChat - Chat with Others");
 			stage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

@@ -1,10 +1,13 @@
 package application.signin;
 
+import java.io.IOException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
 import application.Navigation;
 import application.StandardClient;
+import application.chatboard.ChatBoard;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -22,11 +25,9 @@ public class SignIn implements Initializable {
 	
 	private boolean connectRequirementCheck;
 	private boolean connectionCheck;
-	
-	private StandardClient client;
-	
+		
 	@FXML
-	public void handleConnectButton() {
+	public void handleConnectButton() throws UnknownHostException, IOException {
 		connectRequirementCheck = true;
 		
 		userName = userNameEntry.getText().toString();
@@ -64,17 +65,11 @@ public class SignIn implements Initializable {
 			connectStatusResult.setTextFill(Color.rgb(0, 0, 210));
 			connectStatusResult.setText("Connecting to Server...");
 
-			client = new StandardClient();
-
-//			int portNumber = Integer.parseInt(portNo);
-//			client.setServerAddress(serverAddress);
-//			client.setPortNumber(portNumber);
-			
-			client.setServerAddress("192.168.0.63");	//This should be removed	
-			client.setPortNumber(3000);	//This should be removed
-			connectionCheck = client.connectToServer();
-			
+			connectionCheck = true;			
 			if(connectionCheck) {
+				new StandardClient("192.168.0.63", 3000).start(); // Address and Port
+				
+				ChatBoard.setConnectionString("Connected To Server");
 				Navigation.loadContent(Navigation.CHAT_Board);
 			} else {
 				connectStatusResult.setTextFill(Color.rgb(232,0,5));
