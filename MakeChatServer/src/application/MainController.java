@@ -23,7 +23,7 @@ public class MainController implements Initializable {
 	
 	@FXML
 	public void openServer() {
-		t = new MainServer(3005);
+		t = new MainServer(3000);
 		t.start();
 		
 		connectionStatus.setText("Server is running!!");

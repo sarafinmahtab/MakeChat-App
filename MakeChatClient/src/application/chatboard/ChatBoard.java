@@ -1,12 +1,17 @@
 package application.chatboard;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.ResourceBundle;
 
 import application.DataSender;
+import application.Message;
 import bubble.BubbleSpec;
 import bubble.BubbledLabel;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -24,7 +29,36 @@ public class ChatBoard implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		connectionStatus.setText("Connected to Server");
+		
+	}
+	
+	public void initConnectionStatus(String connection, String userName) {
+		Task<Void> initConnection = new Task<Void>() {
+
+			@Override
+			protected Void call() throws Exception {
+				return null;
+			}
+		};
+		
+		initConnection.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
+
+			@Override
+			public void handle(WorkerStateEvent worker) {
+				
+				userNameLabel.setText(userName);
+				if(connection.equals("FAILED")) {
+					connectionStatus.setTextFill(Color.RED);
+					connectionStatus.setText("Connection Suspended!!");
+				} else {
+					connectionStatus.setTextFill(Color.BLACK);
+					connectionStatus.setText(connection);
+				}
+			}
+			
+		});
+		
+		new Thread(initConnection).start();
 	}
 	
 	@FXML
@@ -33,6 +67,15 @@ public class ChatBoard implements Initializable{
 		textMessage.clear();
 		
 		if(!clientMessage.isEmpty()) {
+			
+			Message messageObject = new Message();
+			messageObject.setMessage(clientMessage);
+			messageObject.setUserName(userNameLabel.getText().toString());
+			
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd HH:mm");
+			Calendar now = Calendar.getInstance();
+			messageObject.setMsgProcessTime(formatter.format(now.getTime()));
+			
 			new DataSender(clientMessage).runOperation();
 		}
 	}
@@ -46,13 +89,13 @@ public class ChatBoard implements Initializable{
 //                ImageView profileImage = new ImageView(image);
 //                profileImage.setFitHeight(32);
 //                profileImage.setFitWidth(32);
-                BubbledLabel bl6 = new BubbledLabel();
+                
+            	BubbledLabel bl6 = new BubbledLabel();
                 bl6.setText(message);
-
-                bl6.setBackground(new Background(new BackgroundFill(Color.WHITE,null, null)));
-                HBox x = new HBox();
+                bl6.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
                 bl6.setBubbleSpec(BubbleSpec.FACE_LEFT_CENTER);
                 
+                HBox x = new HBox();
                 x.getChildren().addAll(bl6);
                 return x;
             }
@@ -74,9 +117,10 @@ public class ChatBoard implements Initializable{
         t.start();
 	}
 	
-	@FXML private Label messages;
 	@FXML private TextField textMessage;
 	
 	@FXML private ListView<HBox> chatPane;
 	@FXML private Label connectionStatus;
+	@FXML private Label userNameLabel;
+	@FXML private Label notificationLabel;
 }

@@ -12,9 +12,9 @@ public class StandardClient extends Thread {
 	
 	private String host;
 	private int port;
-	private String userName;
     public ChatBoard chatController;
-
+    
+    private String userName;
 	private Socket client;
 	
 	public StandardClient(String host, int port, String userName, ChatBoard controller) {
@@ -34,14 +34,6 @@ public class StandardClient extends Thread {
 			// create a new thread for server messages handling
 			new Thread(new ReceivedMessagesHandler(client, userName, chatController)).start();
 
-//			// ask for a nickname
-//			Scanner sc = new Scanner(System.in);
-//			System.out.print("Enter a nickname: ");
-//			nickname = sc.nextLine();
-//
-//			// read messages from keyboard and send to server
-//			System.out.println("Send messages: ");
-			
 			DataSender.setOutputStream(client.getOutputStream());
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -54,9 +46,11 @@ public class StandardClient extends Thread {
 class ReceivedMessagesHandler implements Runnable {
 
 	private Socket clientSocket;
-	private String userName;
 	private ChatBoard chatController;
-
+	
+	private String userName;
+    private String connectionText;
+	
 	public ReceivedMessagesHandler(Socket clientSocket, String userName, ChatBoard chatController) {
 		this.clientSocket = clientSocket;
 		this.userName = userName;
@@ -66,6 +60,10 @@ class ReceivedMessagesHandler implements Runnable {
 	@Override
 	public void run() {
 		try {
+			connectionText = "Connected To Server";
+			
+			chatController.initConnectionStatus(connectionText, userName);
+			
 			// receive server messages and print out to screen
 			DataInputStream dataInputStream = new DataInputStream(clientSocket.getInputStream());
 			
@@ -77,8 +75,14 @@ class ReceivedMessagesHandler implements Runnable {
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
+			connectionText = "FAILED";
+			
+			chatController.initConnectionStatus(connectionText, userName);
 			e.printStackTrace();
 		} catch (NullPointerException e) {
+			connectionText = "FAILED";
+			chatController.initConnectionStatus(connectionText, userName);
+			
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}

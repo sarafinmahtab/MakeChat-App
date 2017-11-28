@@ -11,23 +11,23 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="550.0" prefWidth="750.0" stylesheets="@siginin.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.signin.SignIn">
+<AnchorPane prefHeight="500.0" prefWidth="520.0" stylesheets="@siginin.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.signin.SignIn">
    <children>
-      <VBox layoutX="315.0" layoutY="62.0" prefHeight="120.0" prefWidth="120.0">
+      <VBox layoutX="200.0" layoutY="40.0" prefHeight="120.0" prefWidth="120.0">
          <children>
             <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../res/icons/profile_pictures.png" />
                </image>
             </ImageView>
-            <Label fx:id="upload_hint" alignment="CENTER" contentDisplay="CENTER" prefWidth="120.0" text="Click to Upload" textAlignment="CENTER">
+            <Label fx:id="uploadHint" alignment="CENTER" contentDisplay="CENTER" prefWidth="120.0" text="Click to Upload" textAlignment="CENTER">
                <font>
                   <Font name="Consolas Bold Italic" size="11.0" />
                </font>
             </Label>
          </children>
       </VBox>
-      <VBox alignment="CENTER" layoutX="175.0" layoutY="228.0" prefWidth="400.0" spacing="3.0">
+      <VBox alignment="CENTER" layoutX="66.0" layoutY="205.0" prefHeight="260.0" prefWidth="400.0" spacing="3.0">
          <children>
             <TextField fx:id="userNameEntry" prefHeight="30.0" prefWidth="300.0" promptText="Provide an Username" />
             <Label fx:id="userNameError" alignment="CENTER" />
@@ -41,9 +41,9 @@
             </HBox>
             <Label fx:id="serverAddressError" alignment="CENTER" />
             <Button fx:id="connectButton" mnemonicParsing="false" onAction="#handleConnectButton" prefHeight="25.0" prefWidth="300.0" text="Connect" />
-            <Label fx:id="connectStatusResult" alignment="CENTER" textAlignment="CENTER">
+            <Label fx:id="connectStatusResult" alignment="CENTER" prefHeight="18.0" prefWidth="373.0" textAlignment="CENTER">
                <VBox.margin>
-                  <Insets top="36.0" />
+                  <Insets top="25.0" />
                </VBox.margin>
             </Label>
          </children>

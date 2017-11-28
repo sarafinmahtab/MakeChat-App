@@ -70,7 +70,7 @@ public class SignIn implements Initializable {
 		}
 		
 		serverAddress = "192.168.0.63"; // This should be removed
-		portNo = "3005"; // This should be removed
+		portNo = "3000"; // This should be removed
 		connectRequirementCheck = true; // This should be removed
 		if(connectRequirementCheck) {
 			connectStatusResult.setTextFill(Color.rgb(0, 0, 210));
@@ -124,6 +124,7 @@ public class SignIn implements Initializable {
 	@FXML private Label emailError;
 	@FXML private Label serverAddressError;
 	@FXML private Label connectStatusResult;
+	@FXML private Label uploadHint;
 	
 	@FXML private TextField userNameEntry;
 	@FXML private TextField emailEntry;

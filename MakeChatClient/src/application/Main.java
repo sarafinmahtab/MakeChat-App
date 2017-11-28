@@ -17,7 +17,7 @@ public class Main extends Application {
 		primaryStage = stage;
         
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("application/signin/Signin.fxml"));
-        stage.setTitle("MakeChat Client");
+        stage.setTitle("MakeChat App - Chat with Friends");
 
 //        stage.getIcons().add(new Image(getClass().getClassLoader().getResource("images/plug.png").toString()));
         Scene mainScene = new Scene(root);
