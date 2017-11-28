@@ -3,7 +3,6 @@ package application;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class MainServer extends Thread {
 				this.clientsList.add(new DataOutputStream(clientSocket.getOutputStream()));
 				
 				// create a new thread for client handling
-				new Thread(new ClientHandler(this, clientSocket.getInputStream())).start();
+				new Thread(new ClientHandler(this, clientSocket)).start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -62,11 +61,11 @@ public class MainServer extends Thread {
 class ClientHandler implements Runnable {
 
 	private MainServer server;
-	private InputStream clientInputStream;
+	private Socket serverSocket;
 
-	public ClientHandler(MainServer server, InputStream clientInputStream) {
+	public ClientHandler(MainServer server, Socket serverSocket) {
 		this.server = server;
-		this.clientInputStream = clientInputStream;
+		this.serverSocket = serverSocket;
 	}
 
 	@Override
@@ -74,15 +73,15 @@ class ClientHandler implements Runnable {
 		
 		try {
 			// when there is a new message, broadcast to all
-			DataInputStream dataInputStream = new DataInputStream(this.clientInputStream);
+			DataInputStream dataInputStream = new DataInputStream(serverSocket.getInputStream());
 			
-			while(true) {
+			while(serverSocket.isConnected()) {
 				String message = dataInputStream.readUTF();
 				System.out.println(message);
 				server.broadcastMessages(message);
 			}
 		} catch (IOException e) {
-			System.out.println(e.getMessage() + " Shit");
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 	}

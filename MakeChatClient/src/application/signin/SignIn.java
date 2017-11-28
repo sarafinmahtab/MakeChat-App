@@ -5,15 +5,22 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
-import application.Navigation;
+import application.ResizeHelper;
 import application.StandardClient;
 import application.chatboard.ChatBoard;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 public class SignIn implements Initializable {
@@ -25,7 +32,9 @@ public class SignIn implements Initializable {
 	
 	private boolean connectRequirementCheck;
 	private boolean connectionCheck;
-		
+	
+	private Scene scene;
+	
 	@FXML
 	public void handleConnectButton() throws UnknownHostException, IOException {
 		connectRequirementCheck = true;
@@ -60,17 +69,23 @@ public class SignIn implements Initializable {
 			userNameError.setText("Username is required");
 		}
 		
+		serverAddress = "192.168.0.63"; // This should be removed
+		portNo = "3005"; // This should be removed
 		connectRequirementCheck = true; // This should be removed
 		if(connectRequirementCheck) {
 			connectStatusResult.setTextFill(Color.rgb(0, 0, 210));
 			connectStatusResult.setText("Connecting to Server...");
 
-			connectionCheck = true;			
+			connectionCheck = true; // This should be removed
 			if(connectionCheck) {
-				new StandardClient("192.168.0.63", 3000).start(); // Address and Port
+		        FXMLLoader fmxlLoader = new FXMLLoader(getClass().getResource("/application/chatboard/ChatBoard.fxml"));
+		        Parent window = (Pane) fmxlLoader.load();
+		        ChatBoard controller = fmxlLoader.<ChatBoard>getController();
+		        
+				new StandardClient(serverAddress, Integer.valueOf(portNo), userName, controller).start(); // Address and Port
 				
-				ChatBoard.setConnectionString("Connected To Server");
-				Navigation.loadContent(Navigation.CHAT_Board);
+		        this.scene = new Scene(window);
+		        showScene();
 			} else {
 				connectStatusResult.setTextFill(Color.rgb(232,0,5));
 				connectStatusResult.setText("No Server found!!");
@@ -81,6 +96,22 @@ public class SignIn implements Initializable {
 		}
 	}
 	
+    public void showScene() throws IOException {
+        Platform.runLater(() -> {
+            Stage stage = (Stage) userNameError.getScene().getWindow();
+            stage.setResizable(true);
+
+            stage.setOnCloseRequest((WindowEvent e) -> {
+                Platform.exit();
+                System.exit(0);
+            });
+            stage.setScene(this.scene);
+            ResizeHelper.addResizeListener(stage);
+            
+            stage.centerOnScreen();
+        });
+    }
+    
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		userNameEntry.setFocusTraversable(false);
