@@ -8,7 +8,7 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -23,15 +23,12 @@
             <ListView fx:id="chatPane" prefHeight="380.0" prefWidth="500.0" />
             <HBox alignment="CENTER">
                <children>
-                  <TextField fx:id="textMessage" prefHeight="35.0" prefWidth="450.0" promptText="Write anything to friends" />
-                  <VBox alignment="CENTER" stylesheets="@chatboard.css">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#sendMsg" prefHeight="35.0" prefWidth="50.0" text="Send">
-                           <VBox.margin>
-                              <Insets left="2.0" />
-                           </VBox.margin></Button>
-                     </children>
-                  </VBox>
+                  <TextArea fx:id="textMessage" prefHeight="40.0" prefWidth="450.0" />
+                  <Button mnemonicParsing="false" onAction="#sendMsg" prefHeight="40.0" prefWidth="50.0" text="Send">
+                     <HBox.margin>
+                        <Insets left="2.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
             </HBox>
          </children>

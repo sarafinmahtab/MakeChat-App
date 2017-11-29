@@ -104,7 +104,7 @@ class ReceivedMessagesHandler implements Runnable {
 				Message messageObj = (Message) objectInputStream.readObject();
 				System.out.println(messageObj.getMessage());
 				
-				chatController.addToChat(messageObj.getMessage());
+				chatController.addToChat(messageObj);
 			}
 
 		} catch (IOException e) {

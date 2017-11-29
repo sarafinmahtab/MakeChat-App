@@ -5,7 +5,6 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ResourceBundle;
 
-import application.ResizeHelper;
 import application.StandardClient;
 import application.chatboard.ChatBoard;
 import javafx.application.Platform;
@@ -99,16 +98,14 @@ public class SignIn implements Initializable {
     public void showScene() throws IOException {
         Platform.runLater(() -> {
             Stage stage = (Stage) userNameError.getScene().getWindow();
-            stage.setResizable(true);
+            stage.setResizable(false);
 
             stage.setOnCloseRequest((WindowEvent e) -> {
                 Platform.exit();
                 System.exit(0);
             });
             stage.setScene(this.scene);
-            ResizeHelper.addResizeListener(stage);
-            
-            stage.centerOnScreen();
+//            ResizeHelper.addResizeListener(stage);            
         });
     }
     

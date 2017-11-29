@@ -28,6 +28,7 @@ public class Main extends Application {
         stage.setScene(mainScene);
         stage.show();
         stage.setOnCloseRequest(e -> Platform.exit());
+        stage.centerOnScreen();
 	}
 	
 	public static void main(String[] args) {
