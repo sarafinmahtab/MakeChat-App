@@ -1,12 +1,10 @@
 package application.chatboard;
 
+import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.ResourceBundle;
 
-import application.DataSender;
-import application.Message;
+import application.StandardClient;
 import bubble.BubbleSpec;
 import bubble.BubbledLabel;
 import javafx.concurrent.Task;
@@ -62,21 +60,12 @@ public class ChatBoard implements Initializable{
 	}
 	
 	@FXML
-	public void sendMsg() {
+	public void sendMsg() throws IOException {
 		clientMessage = textMessage.getText().toString();
 		textMessage.clear();
-		
+				
 		if(!clientMessage.isEmpty()) {
-			
-			Message messageObject = new Message();
-			messageObject.setMessage(clientMessage);
-			messageObject.setUserName(userNameLabel.getText().toString());
-			
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd HH:mm");
-			Calendar now = Calendar.getInstance();
-			messageObject.setMsgProcessTime(formatter.format(now.getTime()));
-			
-			new DataSender(clientMessage).runOperation();
+			StandardClient.send(clientMessage);
 		}
 	}
 	

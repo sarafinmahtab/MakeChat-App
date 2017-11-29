@@ -1,23 +1,23 @@
 package application;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 
 public class MainServer extends Thread {
 	
 	private int port;
-	private List<DataOutputStream> clientsList;
+	static HashSet<ObjectOutputStream> writers = new HashSet<>();
 	private ServerSocket serverSocket;
 	
 	public MainServer(int port) {
 		this.port = port;
-		this.clientsList = new ArrayList<DataOutputStream>();
 	}
 
 	public void run() {
@@ -38,10 +38,6 @@ public class MainServer extends Thread {
 			try {
 				clientSocket = serverSocket.accept();
 				System.out.println("Connection established with client: " + clientSocket.getRemoteSocketAddress());
-
-				MainController.connectedDeviceList.add(clientSocket.getRemoteSocketAddress().toString());
-				// add client message to list
-				this.clientsList.add(new DataOutputStream(clientSocket.getOutputStream()));
 				
 				// create a new thread for client handling
 				new Thread(new ClientHandler(this, clientSocket)).start();
@@ -51,9 +47,11 @@ public class MainServer extends Thread {
 		}
 	}
 
-	void broadcastMessages(String msg) throws IOException{
-		for (DataOutputStream outputStream : this.clientsList) {
-			outputStream.writeUTF(msg);
+	void broadcastMessages(Message messageObj) throws IOException{
+		for (ObjectOutputStream writer : writers) {
+			// Add userList later
+			writer.writeObject(messageObj);
+			writer.reset();
 		}
 	}
 }
@@ -62,27 +60,84 @@ class ClientHandler implements Runnable {
 
 	private MainServer server;
 	private Socket serverSocket;
-
+	
+	private OutputStream outputStream;
+	private ObjectOutputStream objectOutputStream;
+	
+	private InputStream inputStream;
+	private ObjectInputStream objectInputStream;
+	
 	public ClientHandler(MainServer server, Socket serverSocket) {
 		this.server = server;
 		this.serverSocket = serverSocket;
+		inputStream = null;
+		objectInputStream = null;
 	}
 
 	@Override
 	public void run() {
 		
 		try {
+			outputStream = serverSocket.getOutputStream();
+			objectOutputStream = new ObjectOutputStream(outputStream);
+			
 			// when there is a new message, broadcast to all
-			DataInputStream dataInputStream = new DataInputStream(serverSocket.getInputStream());
+			inputStream = serverSocket.getInputStream();
+			objectInputStream = new ObjectInputStream(inputStream);
+			
+			MainController.connectedDeviceList.add(serverSocket.getRemoteSocketAddress().toString());
+			// add client message to list
+            MainServer.writers.add(objectOutputStream);
 			
 			while(serverSocket.isConnected()) {
-				String message = dataInputStream.readUTF();
-				System.out.println(message);
-				server.broadcastMessages(message);
+				Message messageObj = (Message) objectInputStream.readObject();
+
+				if(messageObj != null) {
+					System.out.println(messageObj.getMessage());
+					server.broadcastMessages(messageObj);
+				}
 			}
+
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
+	}
+
+	private synchronized  void closeConnection() {
+        if (objectOutputStream != null){
+        	MainServer.writers.remove(objectOutputStream);
+        }
+        
+        if (outputStream != null){
+            try {
+            	outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        if (inputStream != null){
+            try {
+            	inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        if (objectInputStream != null){
+            try {
+            	objectInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }		
 	}
 }

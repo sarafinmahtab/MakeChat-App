@@ -1,9 +1,14 @@
 package application;
 
-import java.io.DataInputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import application.chatboard.ChatBoard;
 
@@ -14,14 +19,20 @@ public class StandardClient extends Thread {
 	private int port;
     public ChatBoard chatController;
     
-    private String userName;
+    private static String userName;
 	private Socket client;
+	
+	private OutputStream outputStream;
+	private static ObjectOutputStream objectOutputStream;
 	
 	public StandardClient(String host, int port, String userName, ChatBoard controller) {
 		this.host = host;
 		this.port = port;
-		this.userName = userName;
+		StandardClient.userName = userName;
 		this.chatController = controller;
+		
+		outputStream = null;
+		objectOutputStream = null;
 	}
 
 	@Override
@@ -31,15 +42,31 @@ public class StandardClient extends Thread {
 			
 			System.out.println("Client successfully connected to server!");
 
+			outputStream = client.getOutputStream();
+			objectOutputStream = new ObjectOutputStream(outputStream);
+			
 			// create a new thread for server messages handling
 			new Thread(new ReceivedMessagesHandler(client, userName, chatController)).start();
-
-			DataSender.setOutputStream(client.getOutputStream());
+			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void send(String msg) throws IOException {
+
+		Message messageObject = new Message();
+		messageObject.setMessage(msg);
+		messageObject.setUserName(userName);
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd HH:mm");
+		Calendar now = Calendar.getInstance();
+		messageObject.setMsgProcessTime(formatter.format(now.getTime()));
+		
+		objectOutputStream.writeObject(messageObject);
+		objectOutputStream.flush();
 	}
 }
 
@@ -51,40 +78,78 @@ class ReceivedMessagesHandler implements Runnable {
 	private String userName;
     private String connectionText;
 	
+    private InputStream inputStream;
+    private ObjectInputStream objectInputStream;
+    
 	public ReceivedMessagesHandler(Socket clientSocket, String userName, ChatBoard chatController) {
 		this.clientSocket = clientSocket;
 		this.userName = userName;
 		this.chatController = chatController;
+		inputStream = null;
+		objectInputStream = null;
 	}
 
 	@Override
 	public void run() {
 		try {
 			connectionText = "Connected To Server";
-			
+
 			chatController.initConnectionStatus(connectionText, userName);
 			
-			// receive server messages and print out to screen
-			DataInputStream dataInputStream = new DataInputStream(clientSocket.getInputStream());
-			
+			// receive server messages and print out to screen			
+			inputStream = clientSocket.getInputStream();
+			objectInputStream = new ObjectInputStream(inputStream);
+
 			while(clientSocket.isConnected()) {
-				String message = dataInputStream.readUTF();
-				System.out.println(message);
+				Message messageObj = (Message) objectInputStream.readObject();
+				System.out.println(messageObj.getMessage());
 				
-				chatController.addToChat(message);
+				chatController.addToChat(messageObj.getMessage());
 			}
+
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
-			connectionText = "FAILED";
 			
+			connectionText = "FAILED";
 			chatController.initConnectionStatus(connectionText, userName);
+			
 			e.printStackTrace();
 		} catch (NullPointerException e) {
+			System.out.println(e.getMessage());
+			
+			connectionText = "FAILED";
+			chatController.initConnectionStatus(connectionText, userName);
+						
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			System.out.println(e.getMessage());
+			
 			connectionText = "FAILED";
 			chatController.initConnectionStatus(connectionText, userName);
 			
-			System.out.println(e.getMessage());
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
+	}
+
+	private synchronized  void closeConnection() {
+		
+        if (inputStream != null){
+            try {
+            	inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        if (objectInputStream != null){
+            try {
+            	objectInputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        
 	}
 }
