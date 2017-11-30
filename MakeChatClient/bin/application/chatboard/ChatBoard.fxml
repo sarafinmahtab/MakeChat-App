@@ -18,7 +18,7 @@
    <children>
       <Separator layoutX="89.0" layoutY="45.0" />
       <Label fx:id="connectionStatus" layoutX="10.0" layoutY="37.0" text="Connected to Server" />
-      <VBox layoutX="10.0" layoutY="57.0" spacing="4.0">
+      <VBox alignment="CENTER" layoutX="10.0" layoutY="57.0" spacing="4.0">
          <children>
             <ListView fx:id="chatPane" prefHeight="380.0" prefWidth="500.0" />
             <HBox alignment="CENTER">

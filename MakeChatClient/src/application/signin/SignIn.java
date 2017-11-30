@@ -38,7 +38,7 @@ public class SignIn implements Initializable {
 	public void handleConnectButton() throws UnknownHostException, IOException {
 		connectRequirementCheck = true;
 		
-		userName = userNameEntry.getText().toString();
+		userName = "@" + userNameEntry.getText().toString();
 		email = emailEntry.getText().toString();
 		serverAddress = serverAddressEntry.getText().toString();
 		portNo = portNumberEntry.getText().toString();

@@ -20,6 +20,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 
@@ -81,23 +82,34 @@ public class ChatBoard implements Initializable{
 //                profileImage.setFitHeight(32);
 //                profileImage.setFitWidth(32);
                 
-//            	BubbledLabel bl6 = new BubbledLabel();
-//                bl6.setText(message);
-//                bl6.setBackground(new Background(new BackgroundFill(Color.rgb(218, 218, 218), null, null)));
-//                bl6.setBubbleSpec(BubbleSpec.FACE_LEFT_CENTER);
-//                
                 Label messageLabel = new Label();
                 messageLabel.setText(messageObj.getMessage());
+                messageLabel.setTextFill(Color.BLACK);
                 
+                Label userLabel = new Label();
+                userLabel.setText(messageObj.getUserName());
+                userLabel.setStyle("-fx-font-weight: bold;");
+                userLabel.setTextFill(Color.BLACK);
+                
+                VBox vBox = new VBox(2);
                 CornerRadii cornerRadi = new CornerRadii(5f);
                 BackgroundFill backgroundFill = new BackgroundFill(Color.rgb(218, 218, 218), cornerRadi, null);
-                messageLabel.setBackground(new Background(backgroundFill));
-                messageLabel.setPadding(new Insets(5f));
+                vBox.setBackground(new Background(backgroundFill));
+                vBox.setPadding(new Insets(5f));
+                vBox.getChildren().addAll(userLabel, messageLabel);
                 
-                HBox x = new HBox();
+                Label dateLabel = new Label();
+                dateLabel.setText(messageObj.getMsgProcessTime());
+                dateLabel.setStyle("-fx-font-size: 10;");
+                dateLabel.setTextFill(Color.GRAY);
+                dateLabel.setAlignment(Pos.CENTER);
+                dateLabel.setMaxHeight(Double.MAX_VALUE);
+                
+                HBox x = new HBox(2);
                 x.setMaxWidth(chatPane.getWidth() - 20);
                 x.setAlignment(Pos.TOP_LEFT);
-                x.getChildren().addAll(messageLabel);
+                x.getChildren().addAll(vBox, dateLabel);
+
                 return x;
             }
         };
@@ -117,18 +129,31 @@ public class ChatBoard implements Initializable{
 
                 Label messageLabel = new Label();
                 messageLabel.setText(messageObj.getMessage());
-                
-                CornerRadii cornerRadi = new CornerRadii(5f);
-                BackgroundFill backgroundFill = new BackgroundFill(Color.rgb(64, 128, 128), cornerRadi, null);
-                messageLabel.setBackground(new Background(backgroundFill));
-                messageLabel.setPadding(new Insets(5f));
                 messageLabel.setTextFill(Color.WHITE);
                 
-                HBox x = new HBox();
+                Label userLabel = new Label();
+                userLabel.setText(messageObj.getUserName());
+                userLabel.setStyle("-fx-font-weight: bold;");
+                userLabel.setTextFill(Color.WHITE);
+                
+                VBox vBox = new VBox(2);
+                CornerRadii cornerRadi = new CornerRadii(5f);
+                BackgroundFill backgroundFill = new BackgroundFill(Color.rgb(64, 128, 128), cornerRadi, null);
+                vBox.setBackground(new Background(backgroundFill));
+                vBox.setPadding(new Insets(5f));
+                vBox.getChildren().addAll(userLabel, messageLabel);
+                
+                Label dateLabel = new Label();
+                dateLabel.setText(messageObj.getMsgProcessTime());
+                dateLabel.setStyle("-fx-font-size: 10;");
+                dateLabel.setTextFill(Color.GRAY);
+                dateLabel.setAlignment(Pos.CENTER);
+                dateLabel.setMaxHeight(Double.MAX_VALUE);
+
+                HBox x = new HBox(2);
                 x.setMaxWidth(chatPane.getWidth() - 20);
                 x.setAlignment(Pos.TOP_RIGHT);
-                
-                x.getChildren().addAll(messageLabel);
+                x.getChildren().addAll(dateLabel, vBox);
 
                 return x;
             }
