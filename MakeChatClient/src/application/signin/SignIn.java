@@ -25,7 +25,6 @@ import javafx.stage.WindowEvent;
 public class SignIn implements Initializable {
 	
 	private String userName;
-	private String email;
 	private String serverAddress;
 	private String portNo;
 	
@@ -39,9 +38,13 @@ public class SignIn implements Initializable {
 		connectRequirementCheck = true;
 		
 		userName = "@" + userNameEntry.getText().toString();
-		email = emailEntry.getText().toString();
 		serverAddress = serverAddressEntry.getText().toString();
 		portNo = portNumberEntry.getText().toString();
+		
+		if(userNameEntry.getText().toString().equals("")) {
+			connectRequirementCheck = false;
+			userNameError.setText("Username is required");
+		}
 		
 		if(serverAddress.equals("")) {
 			connectRequirementCheck = false;
@@ -58,19 +61,14 @@ public class SignIn implements Initializable {
 			serverAddressError.setText("Server Address and Port number is required");
 		}
 		
-		if(email.equals("")) {
-			connectRequirementCheck = false;
-			emailError.setText("Email is required");
-		}
-		
 		if(userName.equals("")) {
 			connectRequirementCheck = false;
 			userNameError.setText("Username is required");
 		}
 		
-		serverAddress = "192.168.0.63"; // This should be removed
-		portNo = "3000"; // This should be removed
-		connectRequirementCheck = true; // This should be removed
+//		serverAddress = "192.168.0.63"; // This should be removed
+//		portNo = "3000"; // This should be removed
+//		connectRequirementCheck = true; // This should be removed
 		if(connectRequirementCheck) {
 			connectStatusResult.setTextFill(Color.rgb(0, 0, 210));
 			connectStatusResult.setText("Connecting to Server...");
@@ -120,12 +118,11 @@ public class SignIn implements Initializable {
 	@FXML private Label emailError;
 	@FXML private Label serverAddressError;
 	@FXML private Label connectStatusResult;
-	@FXML private Label uploadHint;
 	
 	@FXML private TextField userNameEntry;
 	@FXML private TextField emailEntry;
 	@FXML private TextField serverAddressEntry;
 	@FXML private TextField portNumberEntry;
-	
+		
 	@FXML private Button connectButton;
 }

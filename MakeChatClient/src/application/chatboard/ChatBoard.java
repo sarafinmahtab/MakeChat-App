@@ -45,19 +45,22 @@ public class ChatBoard implements Initializable{
 			protected Void call() throws Exception {
 				
 				userNameLabel.setText(userName);
+				
 				if(connection.equals("FAILED")) {
 					connectionStatus.setTextFill(Color.RED);
 					connectionStatus.setText("Connection Suspended!!");
+					notificationLabel.setText("No connection!!");
 				} else {
 					connectionStatus.setTextFill(Color.BLACK);
 					connectionStatus.setText(connection);
+					notificationLabel.setText("Wait!! Checking Previous Chat...");
 				}
 				
 				dataQuery = new DataQuery();
 				arrayList = dataQuery.retrieveMessages(url, port);
 				
 				for(int i = 0; i < arrayList.size(); i++) {
-					addToChat(arrayList.get(i));
+					addPreviousChat(arrayList.get(i));
 				}
 				arrayList.clear();
 				
@@ -69,15 +72,81 @@ public class ChatBoard implements Initializable{
 
 			@Override
 			public void handle(WorkerStateEvent worker) {
-				
-
+				notificationLabel.setText("Updated ChatBox");
 			}
-			
 		});
 		
 		new Thread(initConnection).start();
-	}	
+	}
 	
+	protected void addPreviousChat(Message messageObj) {
+		
+        if (messageObj.getUserName().equals(userNameLabel.getText().toString())) {
+
+            Label messageLabel = new Label();
+            messageLabel.setText(messageObj.getMessage());
+            messageLabel.setTextFill(Color.WHITE);
+            
+            Label userLabel = new Label();
+            userLabel.setText(messageObj.getUserName());
+            userLabel.setStyle("-fx-font-weight: bold;");
+            userLabel.setTextFill(Color.WHITE);
+            
+            VBox vBox = new VBox(2);
+            CornerRadii cornerRadi = new CornerRadii(5f);
+            BackgroundFill backgroundFill = new BackgroundFill(Color.rgb(64, 128, 128), cornerRadi, null);
+            vBox.setBackground(new Background(backgroundFill));
+            vBox.setPadding(new Insets(5f));
+            vBox.getChildren().addAll(userLabel, messageLabel);
+            
+            Label dateLabel = new Label();
+            dateLabel.setText(messageObj.getMsgProcessTime());
+            dateLabel.setStyle("-fx-font-size: 10;");
+            dateLabel.setTextFill(Color.GRAY);
+            dateLabel.setAlignment(Pos.CENTER);
+            dateLabel.setMaxHeight(Double.MAX_VALUE);
+
+            HBox x = new HBox(2);
+            x.setMaxWidth(chatPane.getWidth() - 20);
+            x.setAlignment(Pos.TOP_RIGHT);
+            x.getChildren().addAll(dateLabel, vBox);
+            
+            chatPane.getItems().add(x);
+        } else {
+        	
+            Label messageLabel = new Label();
+            messageLabel.setText(messageObj.getMessage());
+            messageLabel.setTextFill(Color.BLACK);
+            
+            Label userLabel = new Label();
+            userLabel.setText(messageObj.getUserName());
+            userLabel.setStyle("-fx-font-weight: bold;");
+            userLabel.setTextFill(Color.BLACK);
+            
+            VBox vBox = new VBox(2);
+            CornerRadii cornerRadi = new CornerRadii(5f);
+            BackgroundFill backgroundFill = new BackgroundFill(Color.rgb(218, 218, 218), cornerRadi, null);
+            vBox.setBackground(new Background(backgroundFill));
+            vBox.setPadding(new Insets(5f));
+            vBox.getChildren().addAll(userLabel, messageLabel);
+            
+            
+            Label dateLabel = new Label();
+            dateLabel.setText(messageObj.getMsgProcessTime());
+            dateLabel.setStyle("-fx-font-size: 10;");
+            dateLabel.setTextFill(Color.GRAY);
+            dateLabel.setAlignment(Pos.CENTER);
+            dateLabel.setMaxHeight(Double.MAX_VALUE);
+            
+            HBox x = new HBox(2);
+            x.setMaxWidth(chatPane.getWidth() - 20);
+            x.setAlignment(Pos.TOP_LEFT);
+            x.getChildren().addAll(vBox, dateLabel);
+            
+            chatPane.getItems().add(x);
+        }
+	}
+
 	@FXML
 	public void sendMsg() throws IOException {
 		clientMessage = textMessage.getText().toString();

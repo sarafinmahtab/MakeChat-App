@@ -11,27 +11,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="520.0" stylesheets="@siginin.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.signin.SignIn">
+<AnchorPane prefHeight="500.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.signin.SignIn">
    <children>
-      <VBox layoutX="200.0" layoutY="40.0" prefHeight="120.0" prefWidth="120.0">
-         <children>
-            <ImageView fitHeight="120.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../res/icons/profile_pictures.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="uploadHint" alignment="CENTER" contentDisplay="CENTER" prefWidth="120.0" text="Click to Upload" textAlignment="CENTER">
-               <font>
-                  <Font name="Consolas Bold Italic" size="11.0" />
-               </font>
-            </Label>
-         </children>
-      </VBox>
+      <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="200.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@application/makechat_icon.png" />
+         </image></ImageView>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="136.0" layoutY="160.0" prefHeight="19.0" prefWidth="260.0" text="Make Chat Zone -  Chat with Friends" textAlignment="CENTER">
+         <font>
+            <Font name="Cambria" size="16.0" />
+         </font>
+      </Label>
       <VBox alignment="CENTER" layoutX="66.0" layoutY="205.0" prefHeight="260.0" prefWidth="400.0" spacing="3.0">
          <children>
             <TextField fx:id="userNameEntry" prefHeight="30.0" prefWidth="300.0" promptText="Provide an Username" />
             <Label fx:id="userNameError" alignment="CENTER" />
-            <TextField fx:id="emailEntry" prefHeight="30.0" prefWidth="300.0" promptText="Provide an email address" />
+            <TextField fx:id="emailEntry" prefHeight="30.0" prefWidth="300.0" promptText="Provide an email address (Optional)" />
             <Label fx:id="emailError" alignment="CENTER" />
             <HBox alignment="CENTER" spacing="26.0">
                <children>
