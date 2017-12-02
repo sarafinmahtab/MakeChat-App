@@ -1,11 +1,7 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
-.list-cell {
-    -fx-background-color: white;
-}
-
-.list-cell:selected {
-    -fx-background-color:transparent;
+#listView-cell {
+    -fx-background-color:white;
 }
 
 #userNameError {

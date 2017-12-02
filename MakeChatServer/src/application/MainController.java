@@ -12,9 +12,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+/**
+ * @author Arafin
+ *
+ */
 
 public class MainController implements Initializable {
 		
@@ -22,9 +28,12 @@ public class MainController implements Initializable {
 	private ObservableList<String> dataObservableList;
 	private Thread t;
 	
+	private int portNumber = 3000; // Default
+	
 	@FXML
 	public void openServer() {
-		t = new MainServer(3000);
+		portNumber = Integer.parseInt((portNumberEntry.getText().toString()));
+		t = new MainServer(portNumber);
 		t.start();
 		
 		connectionStatus.setText("Server is running!!");
@@ -74,4 +83,5 @@ public class MainController implements Initializable {
 	}
 
 	@FXML private Label connectionStatus;
+	@FXML private TextField portNumberEntry;
 }

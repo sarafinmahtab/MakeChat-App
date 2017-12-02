@@ -25,6 +25,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+/**
+ * @author Arafin
+ *
+ */
 
 public class ChatBoard implements Initializable{
 
@@ -35,7 +39,7 @@ public class ChatBoard implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+		chatPane.getStylesheets().add(getClass().getResource("chatboard.css").toExternalForm());
 	}
 	
 	public void initConnectionStatus(String connection, String userName, String url, String port) {
@@ -45,17 +49,8 @@ public class ChatBoard implements Initializable{
 			protected Void call() throws Exception {
 				
 				userNameLabel.setText(userName);
-				
-				if(connection.equals("FAILED")) {
-					connectionStatus.setTextFill(Color.RED);
-					connectionStatus.setText("Connection Suspended!!");
-					notificationLabel.setText("No connection!!");
-				} else {
-					connectionStatus.setTextFill(Color.BLACK);
-					connectionStatus.setText(connection);
-					notificationLabel.setText("Wait!! Checking Previous Chat...");
-				}
-				
+				notificationLabel.setText("Wait!! Checking Previous Chat...");
+
 				dataQuery = new DataQuery();
 				arrayList = dataQuery.retrieveMessages(url, port);
 				
@@ -72,6 +67,16 @@ public class ChatBoard implements Initializable{
 
 			@Override
 			public void handle(WorkerStateEvent worker) {
+				
+				if(connection.equals("FAILED")) {
+					connectionStatus.setTextFill(Color.RED);
+					connectionStatus.setText("Connection Suspended");
+					notificationLabel.setText("No connection!!");
+				} else {
+					connectionStatus.setTextFill(Color.BLACK);
+					connectionStatus.setText(connection);
+				}
+				
 				notificationLabel.setText("Updated ChatBox");
 			}
 		});

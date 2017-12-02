@@ -9,6 +9,11 @@ import java.util.ArrayList;
 
 import application.Message;
 
+/**
+ * @author Arafin
+ *
+ */
+
 public class DataQuery {
 	
 	private String responseUserName, responseMessage, responseDate;

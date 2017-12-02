@@ -6,6 +6,10 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+/**
+ * @author Arafin
+ *
+ */
 
 public class Main extends Application {
 	

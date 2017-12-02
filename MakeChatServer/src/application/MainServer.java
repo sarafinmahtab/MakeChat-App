@@ -11,6 +11,10 @@ import java.util.HashSet;
 
 import application.database.DataInsert;
 
+/**
+ * @author Arafin
+ *
+ */
 
 public class MainServer extends Thread {
 	
@@ -93,7 +97,7 @@ class ClientHandler implements Runnable {
 			inputStream = serverSocket.getInputStream();
 			objectInputStream = new ObjectInputStream(inputStream);
 			
-			MainController.connectedDeviceList.add(serverSocket.getRemoteSocketAddress().toString());
+			MainController.connectedDeviceList.add(serverSocket.getInetAddress().getHostName() + " -> " + serverSocket.getInetAddress().getHostAddress());
 			// add client message to list
             MainServer.writers.add(objectOutputStream);
 			

@@ -12,6 +12,10 @@ import java.util.Calendar;
 
 import application.chatboard.ChatBoard;
 
+/**
+ * @author Arafin
+ *
+ */
 
 public class StandardClient extends Thread {
 	

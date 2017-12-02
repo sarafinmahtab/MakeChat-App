@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -13,10 +12,7 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.signin.SignIn">
    <children>
-      <ImageView fitHeight="120.0" fitWidth="120.0" layoutX="200.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@application/makechat_icon.png" />
-         </image></ImageView>
+      <ImageView fx:id="imageView" fitHeight="120.0" fitWidth="120.0" layoutX="200.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true" />
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="136.0" layoutY="160.0" prefHeight="19.0" prefWidth="260.0" text="Make Chat Zone -  Chat with Friends" textAlignment="CENTER">
          <font>
             <Font name="Cambria" size="16.0" />

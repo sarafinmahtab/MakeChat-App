@@ -6,6 +6,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * @author Arafin
+ *
+ */
+
 public class DataInsert {
 	
 	private String url, port, userName, message, date;

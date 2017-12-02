@@ -16,11 +16,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+/**
+ * @author Arafin
+ *
+ */
 
 public class SignIn implements Initializable {
 	
@@ -44,6 +50,8 @@ public class SignIn implements Initializable {
 		if(userNameEntry.getText().toString().equals("")) {
 			connectRequirementCheck = false;
 			userNameError.setText("Username is required");
+		} else {
+			userNameError.setText("");
 		}
 		
 		if(serverAddress.equals("")) {
@@ -61,9 +69,8 @@ public class SignIn implements Initializable {
 			serverAddressError.setText("Server Address and Port number is required");
 		}
 		
-		if(userName.equals("")) {
-			connectRequirementCheck = false;
-			userNameError.setText("Username is required");
+		if(!serverAddress.equals("") && !portNo.equals("")) {
+			serverAddressError.setText("");
 		}
 		
 //		serverAddress = "192.168.0.63"; // This should be removed
@@ -73,7 +80,7 @@ public class SignIn implements Initializable {
 			connectStatusResult.setTextFill(Color.rgb(0, 0, 210));
 			connectStatusResult.setText("Connecting to Server...");
 
-			connectionCheck = true; // This should be removed
+			connectionCheck = true;
 			if(connectionCheck) {
 		        FXMLLoader fmxlLoader = new FXMLLoader(getClass().getResource("/application/chatboard/ChatBoard.fxml"));
 		        Parent window = (Pane) fmxlLoader.load();
@@ -112,6 +119,9 @@ public class SignIn implements Initializable {
 		emailEntry.setFocusTraversable(false);
 		serverAddressEntry.setFocusTraversable(false);
 		portNumberEntry.setFocusTraversable(false);
+		
+        Image image = new Image(getClass().getClassLoader().getResource("icons/makechat_icon.png").toString());
+        imageView.setImage(image);
 	}
 	
 	@FXML private Label userNameError;
@@ -123,6 +133,8 @@ public class SignIn implements Initializable {
 	@FXML private TextField emailEntry;
 	@FXML private TextField serverAddressEntry;
 	@FXML private TextField portNumberEntry;
+	
+	@FXML private ImageView imageView;
 		
 	@FXML private Button connectButton;
 }
