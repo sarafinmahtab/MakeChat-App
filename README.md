@@ -17,4 +17,6 @@ To get chat history, you need to install this software.
 
 ### How to run
 
-You need to import both MakeChatClient and MakeChatServer repo to your Eclipse IDE. Both of the project has Main.java as launcher Java Class. Do the below changes.
+You need to import both MakeChatClient and MakeChatServer repo to your Eclipse IDE. Both of the project has Main.java as launcher Java Class. Do the below things.
+* In cmd, type 'ipconfig' and get your server ip.
+* In makechat_db.sql, go to 54 line and change the `server_url` and `port_number` as your ip and desired port number.
