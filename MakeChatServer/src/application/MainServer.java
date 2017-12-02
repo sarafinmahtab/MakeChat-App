@@ -9,6 +9,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 
+import application.database.DataInsert;
+
 
 public class MainServer extends Thread {
 	
@@ -40,7 +42,7 @@ public class MainServer extends Thread {
 				System.out.println("Connection established with client: " + clientSocket.getRemoteSocketAddress());
 				
 				// create a new thread for client handling
-				new Thread(new ClientHandler(this, clientSocket)).start();
+				new Thread(new ClientHandler(this, clientSocket, port)).start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -67,9 +69,15 @@ class ClientHandler implements Runnable {
 	private InputStream inputStream;
 	private ObjectInputStream objectInputStream;
 	
-	public ClientHandler(MainServer server, Socket serverSocket) {
+	private String hostAddress;
+	private String portNo;
+	
+	public ClientHandler(MainServer server, Socket serverSocket, int port) {
 		this.server = server;
 		this.serverSocket = serverSocket;
+		portNo = String.valueOf(port);
+		hostAddress = serverSocket.getInetAddress().getHostAddress();
+		
 		inputStream = null;
 		objectInputStream = null;
 	}
@@ -95,6 +103,7 @@ class ClientHandler implements Runnable {
 				if(messageObj != null) {
 					System.out.println(messageObj.getMessage());
 					server.broadcastMessages(messageObj);
+					new DataInsert(hostAddress, portNo, messageObj.getUserName(), messageObj.getMessage(), messageObj.getMsgProcessTime()).insert();
 				}
 			}
 

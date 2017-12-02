@@ -2,10 +2,12 @@ package application.chatboard;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import application.Message;
 import application.StandardClient;
+import application.database.DataQuery;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -28,24 +30,19 @@ public class ChatBoard implements Initializable{
 
 	private String clientMessage;
 	
+	private DataQuery dataQuery;
+	private ArrayList<Message> arrayList;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
 	}
 	
-	public void initConnectionStatus(String connection, String userName) {
+	public void initConnectionStatus(String connection, String userName, String url, String port) {
 		Task<Void> initConnection = new Task<Void>() {
 
 			@Override
 			protected Void call() throws Exception {
-				return null;
-			}
-		};
-		
-		initConnection.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
-
-			@Override
-			public void handle(WorkerStateEvent worker) {
 				
 				userNameLabel.setText(userName);
 				if(connection.equals("FAILED")) {
@@ -55,12 +52,31 @@ public class ChatBoard implements Initializable{
 					connectionStatus.setTextFill(Color.BLACK);
 					connectionStatus.setText(connection);
 				}
+				
+				dataQuery = new DataQuery();
+				arrayList = dataQuery.retrieveMessages(url, port);
+				
+				for(int i = 0; i < arrayList.size(); i++) {
+					addToChat(arrayList.get(i));
+				}
+				arrayList.clear();
+				
+				return null;
+			}
+		};
+		
+		initConnection.setOnSucceeded(new EventHandler<WorkerStateEvent>(){
+
+			@Override
+			public void handle(WorkerStateEvent worker) {
+				
+
 			}
 			
 		});
 		
 		new Thread(initConnection).start();
-	}
+	}	
 	
 	@FXML
 	public void sendMsg() throws IOException {
@@ -71,6 +87,7 @@ public class ChatBoard implements Initializable{
 			StandardClient.send(clientMessage);
 		}
 	}
+	
 	
 	public synchronized void addToChat(Message messageObj) {
 		
@@ -97,6 +114,7 @@ public class ChatBoard implements Initializable{
                 vBox.setBackground(new Background(backgroundFill));
                 vBox.setPadding(new Insets(5f));
                 vBox.getChildren().addAll(userLabel, messageLabel);
+                
                 
                 Label dateLabel = new Label();
                 dateLabel.setText(messageObj.getMsgProcessTime());
@@ -164,7 +182,7 @@ public class ChatBoard implements Initializable{
         });
 
         
-        if (messageObj.getUserName().equals(userNameLabel.getText())) {
+        if (messageObj.getUserName().equals(userNameLabel.getText().toString())) {
             Thread t2 = new Thread(yourMessages);
             t2.setDaemon(true);
             t2.start();

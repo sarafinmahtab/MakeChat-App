@@ -46,7 +46,7 @@ public class StandardClient extends Thread {
 			objectOutputStream = new ObjectOutputStream(outputStream);
 			
 			// create a new thread for server messages handling
-			new Thread(new ReceivedMessagesHandler(client, userName, chatController)).start();
+			new Thread(new ReceivedMessagesHandler(client, userName, host, String.valueOf(port), chatController)).start();
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -61,7 +61,7 @@ public class StandardClient extends Thread {
 		messageObject.setMessage(msg);
 		messageObject.setUserName(userName);
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd HH:mm");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd, HH:mm");
 		Calendar now = Calendar.getInstance();
 		messageObject.setMsgProcessTime(formatter.format(now.getTime()));
 		
@@ -77,14 +77,21 @@ class ReceivedMessagesHandler implements Runnable {
 	
 	private String userName;
     private String connectionText;
+    private String host;
+    private String port;
 	
     private InputStream inputStream;
     private ObjectInputStream objectInputStream;
     
-	public ReceivedMessagesHandler(Socket clientSocket, String userName, ChatBoard chatController) {
+	public ReceivedMessagesHandler(Socket clientSocket, String userName, String host, String port, ChatBoard chatController) {
 		this.clientSocket = clientSocket;
+		
 		this.userName = userName;
+		this.host = host;
+		this.port = port;
+		
 		this.chatController = chatController;
+		
 		inputStream = null;
 		objectInputStream = null;
 	}
@@ -94,7 +101,7 @@ class ReceivedMessagesHandler implements Runnable {
 		try {
 			connectionText = "Connected To Server";
 
-			chatController.initConnectionStatus(connectionText, userName);
+			chatController.initConnectionStatus(connectionText, userName, host, port);
 			
 			// receive server messages and print out to screen			
 			inputStream = clientSocket.getInputStream();
@@ -111,21 +118,21 @@ class ReceivedMessagesHandler implements Runnable {
 			System.out.println(e.getMessage());
 			
 			connectionText = "FAILED";
-			chatController.initConnectionStatus(connectionText, userName);
+			chatController.initConnectionStatus(connectionText, userName, host, port);
 			
 			e.printStackTrace();
 		} catch (NullPointerException e) {
 			System.out.println(e.getMessage());
 			
 			connectionText = "FAILED";
-			chatController.initConnectionStatus(connectionText, userName);
+			chatController.initConnectionStatus(connectionText, userName, host, port);
 						
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 			
 			connectionText = "FAILED";
-			chatController.initConnectionStatus(connectionText, userName);
+			chatController.initConnectionStatus(connectionText, userName, host, port);
 			
 			e.printStackTrace();
 		} finally {

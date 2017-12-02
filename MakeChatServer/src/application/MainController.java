@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,7 +24,7 @@ public class MainController implements Initializable {
 	
 	@FXML
 	public void openServer() {
-		t = new MainServer(3002);
+		t = new MainServer(3000);
 		t.start();
 		
 		connectionStatus.setText("Server is running!!");
@@ -31,11 +32,12 @@ public class MainController implements Initializable {
 	
 	@FXML
 	public void stopServer() throws InterruptedException {
+		Platform.exit();
+		System.exit(0);
+		
 		if(t.isAlive()) {
 			t.join();
 		}
-		
-		System.exit(0);
 	}
 	
 	@FXML

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 
 
 public class Main extends Application {
@@ -18,8 +19,8 @@ public class Main extends Application {
         
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("application/signin/Signin.fxml"));
         stage.setTitle("MakeChat App - Chat with Friends");
-
-//        stage.getIcons().add(new Image(getClass().getClassLoader().getResource("images/plug.png").toString()));
+        stage.getIcons().add(new Image(getClass().getClassLoader().getResource("icons/makechat_icon.png").toString()));
+        
         Scene mainScene = new Scene(root);
         mainScene.setRoot(root);
         mainScene.getStylesheets().setAll(getClass().getResource("application.css").toExternalForm());

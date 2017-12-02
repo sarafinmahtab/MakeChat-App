@@ -69,7 +69,7 @@ public class SignIn implements Initializable {
 		}
 		
 		serverAddress = "192.168.0.63"; // This should be removed
-		portNo = "3002"; // This should be removed
+		portNo = "3000"; // This should be removed
 		connectRequirementCheck = true; // This should be removed
 		if(connectRequirementCheck) {
 			connectStatusResult.setTextFill(Color.rgb(0, 0, 210));
@@ -105,7 +105,6 @@ public class SignIn implements Initializable {
                 System.exit(0);
             });
             stage.setScene(this.scene);
-//            ResizeHelper.addResizeListener(stage);            
         });
     }
     
