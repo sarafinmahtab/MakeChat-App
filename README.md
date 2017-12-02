@@ -11,4 +11,10 @@ The overall project is in two part. One is MakeChat Server and MakeChat Client. 
 You need to install these softwares to run the project.
 
 * [Eclipse Standard Edition](https://www.eclipse.org/downloads/packages/eclipse-ide-java-developers/oxygen1a) - The IDE used
-* [JavaFX Scene Builder](http://www.oracle.com/technetwork/java/javase/downloads/sb2download-2177776.html) - Interface Builder software.
+
+To get chat history, you need to install this software.
+* [XAMPP](https://www.apachefriends.org/index.html) - The Apache Server and MySQL Database
+
+### How to run
+
+You need to import both MakeChatClient and MakeChatServer repo to your Eclipse IDE. Both of the project has Main.java as launcher Java Class. Do the below changes.
