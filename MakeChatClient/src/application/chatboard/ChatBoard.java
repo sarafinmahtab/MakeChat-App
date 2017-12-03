@@ -1,10 +1,14 @@
 package application.chatboard;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import application.Main;
 import application.Message;
 import application.StandardClient;
 import application.database.DataQuery;
@@ -24,6 +28,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 
 /**
  * @author Arafin
@@ -36,10 +41,52 @@ public class ChatBoard implements Initializable{
 	
 	private DataQuery dataQuery;
 	private ArrayList<Message> arrayList;
+	private ArrayList<Message> messageSaveList;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		chatPane.getStylesheets().add(getClass().getResource("chatboard.css").toExternalForm());
+		
+		messageSaveList = new ArrayList<>();
+	}
+	
+	@FXML
+	public void saveMessages() {
+		
+		FileChooser fileChooser = new FileChooser();
+
+		//Set extension filter
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+		fileChooser.getExtensionFilters().add(extFilter);
+		
+		//Show save file dialog
+		File file = fileChooser.showSaveDialog(Main.getPrimaryStage());
+		
+		for(int i = 0; i < messageSaveList.size(); i++) {
+			BufferedWriter bw = null;
+			
+			try {
+				bw = new BufferedWriter(new FileWriter(file, true));
+				bw.write("------------------------");
+				bw.newLine();
+				bw.write("User: " + messageSaveList.get(i).getUserName());
+				bw.newLine();
+				bw.write("Msg: " + messageSaveList.get(i).getMessage());
+				bw.newLine();
+				bw.write("DateTime: " + messageSaveList.get(i).getMsgProcessTime());
+				bw.newLine();
+				bw.newLine();
+				bw.flush();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+		    } finally {
+		    	if (bw != null) try {
+					bw.close();
+				} catch (IOException ioe2) {
+			    	ioe2.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public void initConnectionStatus(String connection, String userName, String url, String port) {
@@ -85,6 +132,8 @@ public class ChatBoard implements Initializable{
 	}
 	
 	protected void addPreviousChat(Message messageObj) {
+		
+		messageSaveList.add(messageObj);
 		
         if (messageObj.getUserName().equals(userNameLabel.getText().toString())) {
 
