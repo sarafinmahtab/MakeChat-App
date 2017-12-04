@@ -27,7 +27,7 @@ To load chat history, you need to install this software.
 You need to import both MakeChatClient and MakeChatServer project to your Eclipse IDE. Both of the server and client project has `Main.java` as launcher Java Class. Do the below things.
 * In cmd, type `ipconfig` and get your server ip.
 * In [makechat_db.sql](https://github.com/sarafinmahtab/MakeChat-App/blob/master/makechat_db.sql), go to 54 line and change the `server_url` and `port_number` as your ip and desired port number. (If you face problem, you can do it in phpmyadmin.). [For Additioanl Feature]
-* Open up Xampp Server and go to phpmyadmin. Create a database named as `makechat_db`. [For Additioanl Feature]
+* Open up Xampp Server and go to phpmyadmin. Create a database named as `makechat_db`. Import [makechat_db.sql](https://github.com/sarafinmahtab/MakeChat-App/blob/master/makechat_db.sql). [For Additioanl Feature]
 
 Now you're ready to run the system.
 * First, run [Main.java](https://github.com/sarafinmahtab/MakeChat-App/blob/master/MakeChatServer/src/application/Main.java) from MakeChatServer project. Then provide that port number you've given in database. Make sure that this port number is free. Now click `Open Server` Button.
