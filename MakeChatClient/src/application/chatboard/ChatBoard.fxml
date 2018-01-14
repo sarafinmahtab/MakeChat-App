@@ -38,13 +38,14 @@
           <Menu mnemonicParsing="false" text="File" />
           <Menu mnemonicParsing="false" text="Save">
                <items>
-              <MenuItem mnemonicParsing="false" onAction="#saveMessages" text="Save Messages" />
+              <MenuItem mnemonicParsing="false" onAction="#saveMessages" text="Current Conversation" />
                </items></Menu>
           <Menu mnemonicParsing="false" text="Help">
                <items>
               <MenuItem mnemonicParsing="false" text="About" />
                </items>
           </Menu>
+            <Menu mnemonicParsing="false" onAction="#exitConnection" text="Exit" />
         </menus>
       </MenuBar>
       <Label fx:id="userNameLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="380.0" layoutY="37.0" prefHeight="17.0" prefWidth="130.0" text="blank" textAlignment="RIGHT">

@@ -12,6 +12,7 @@ import application.Main;
 import application.Message;
 import application.StandardClient;
 import application.database.DataQuery;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -96,7 +97,7 @@ public class ChatBoard implements Initializable{
 			protected Void call() throws Exception {
 				
 				userNameLabel.setText(userName);
-				notificationLabel.setText("Wait!! Checking Previous Chat...");
+				notificationLabel.setText("Wait!! Checking Previous Chats...");
 
 				dataQuery = new DataQuery();
 				arrayList = dataQuery.retrieveMessages(url, port);
@@ -184,7 +185,6 @@ public class ChatBoard implements Initializable{
             vBox.setPadding(new Insets(5f));
             vBox.getChildren().addAll(userLabel, messageLabel);
             
-            
             Label dateLabel = new Label();
             dateLabel.setText(messageObj.getMsgProcessTime());
             dateLabel.setStyle("-fx-font-size: 10;");
@@ -211,8 +211,9 @@ public class ChatBoard implements Initializable{
 		}
 	}
 	
-	
 	public synchronized void addToChat(Message messageObj) {
+		
+		messageSaveList.add(messageObj);
 		
         Task<HBox> othersMessages = new Task<HBox>() {
             @Override
@@ -314,6 +315,12 @@ public class ChatBoard implements Initializable{
             t.setDaemon(true);
             t.start();
         }
+	}
+	
+	@FXML
+	public void exitConnection() {
+		Platform.exit();
+		System.exit(0);
 	}
 	
 	@FXML private TextArea textMessage;

@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.HashSet;
 
 import application.database.DataInsert;
+import application.database.ServerRegister;
 
 /**
  * @author Arafin
@@ -81,6 +82,9 @@ class ClientHandler implements Runnable {
 		this.serverSocket = serverSocket;
 		portNo = String.valueOf(port);
 		hostAddress = serverSocket.getInetAddress().getHostAddress();
+		
+		// Register if Server is new
+		new ServerRegister(hostAddress, portNo).registerToDb();
 		
 		inputStream = null;
 		objectInputStream = null;
