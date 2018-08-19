@@ -1,5 +1,4 @@
 # Make Chat Application
-### REG: 2014331063, 100% Done Alone
 
 Make Chat is a desktop chat application developed based on the theory of Socket Programming where multiple client user connect them through server and can chat continously. This project is an academic project.
 
