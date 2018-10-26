@@ -43,3 +43,9 @@ For easy run experience, just run the .jar files.
 
 * No online domain!! That's why, the app can only save and load previous messages in localhost.
 * Multiple Clients should be in a same network.
+
+## Project Demonstration
+
+Here is the project demonstration with the working features.
+
+![MakeChat App](project_demo.gif)
